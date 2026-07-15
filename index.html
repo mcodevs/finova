@@ -508,9 +508,13 @@
               <label class="form__label" for="f-message">Xabaringiz</label>
               <textarea class="form__input form__textarea" id="f-message" name="message" rows="4" placeholder="Biznesingiz va ehtiyojingiz haqida qisqacha yozing..."></textarea>
             </div>
+            <div class="form__hp" aria-hidden="true">
+              <label for="f-company">Kompaniya (to'ldirmang)</label>
+              <input type="text" id="f-company" name="company" tabindex="-1" autocomplete="off">
+            </div>
             <button type="submit" class="btn btn--accent btn--lg form__submit">Ariza yuborish</button>
             <p class="form__note">Ariza yuborish orqali siz shaxsiy ma'lumotlaringizni qayta ishlashga rozilik bildirasiz.</p>
-            <p class="form__success" id="form-success" role="status" hidden>✓ Arizangiz tayyorlandi! Email ilovangiz orqali yuboring yoki bizga qo'ng'iroq qiling.</p>
+            <p class="form__success" id="form-status" role="status" aria-live="polite" hidden></p>
           </form>
 
           <div class="contact__info reveal">

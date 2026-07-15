@@ -503,9 +503,13 @@
               <label class="form__label" for="f-message">Сообщение</label>
               <textarea class="form__input form__textarea" id="f-message" name="message" rows="4" placeholder="Коротко расскажите о вашем бизнесе и задаче..."></textarea>
             </div>
+            <div class="form__hp" aria-hidden="true">
+              <label for="f-company">Компания (не заполняйте)</label>
+              <input type="text" id="f-company" name="company" tabindex="-1" autocomplete="off">
+            </div>
             <button type="submit" class="btn btn--accent btn--lg form__submit">Отправить заявку</button>
             <p class="form__note">Отправляя заявку, вы даёте согласие на обработку персональных данных.</p>
-            <p class="form__success" id="form-success" role="status" hidden>✓ Заявка готова! Отправьте её через ваше почтовое приложение или позвоните нам.</p>
+            <p class="form__success" id="form-status" role="status" aria-live="polite" hidden></p>
           </form>
 
           <div class="contact__info reveal">

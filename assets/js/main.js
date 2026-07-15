@@ -6,25 +6,22 @@
     uz: {
       menuOpen: "Menyuni ochish",
       menuClose: "Menyuni yopish",
-      subject: "Finova saytidan yangi ariza — ",
-      intro: "Yangi konsultatsiya arizasi (finovagroup.uz):",
-      name: "Ism: ",
-      phone: "Telefon: ",
-      service: "Xizmat: ",
-      message: "Xabar: ",
+      submit: "Ariza yuborish",
+      sending: "Yuborilmoqda…",
+      sent: "✓ Arizangiz yuborildi! Tez orada siz bilan bog'lanamiz.",
+      error: "Xatolik yuz berdi. Iltimos, qayta urinib ko'ring yoki +998 95 663 66 60 raqamiga qo'ng'iroq qiling.",
     },
     ru: {
       menuOpen: "Открыть меню",
       menuClose: "Закрыть меню",
-      subject: "Новая заявка с сайта Finova — ",
-      intro: "Новая заявка на консультацию (finovagroup.uz):",
-      name: "Имя: ",
-      phone: "Телефон: ",
-      service: "Услуга: ",
-      message: "Сообщение: ",
+      submit: "Отправить заявку",
+      sending: "Отправляется…",
+      sent: "✓ Заявка отправлена! Мы свяжемся с вами в ближайшее время.",
+      error: "Произошла ошибка. Попробуйте ещё раз или позвоните по номеру +998 95 663 66 60.",
     },
   };
   const t = STRINGS[document.documentElement.lang] || STRINGS.uz;
+  const LANG = document.documentElement.lang === "ru" ? "ru" : "uz";
 
   /* ---------- Sticky header shadow ---------- */
   const header = document.getElementById("header");
@@ -127,10 +124,13 @@
     });
   });
 
-  /* ---------- Contact form ---------- */
+  /* ---------- Contact form → Telegram (Cloudflare Worker orqali) ---------- */
+  // Worker'ni deploy qilgach, uning manzilini shu yerga qo'ying (worker/README.md).
+  const WORKER_URL = "https://finova-lead.SIZNING-SUBDOMEN.workers.dev";
+
   const form = document.getElementById("contact-form");
-  const success = document.getElementById("form-success");
-  const RECIPIENT = "komilova.nazira13@mail.com";
+  const status = document.getElementById("form-status");
+  const submitBtn = form.querySelector(".form__submit");
 
   const setFieldError = (input, errorEl, show) => {
     input.classList.toggle("is-invalid", show);
@@ -138,14 +138,26 @@
     errorEl.hidden = !show;
   };
 
-  form.addEventListener("submit", (e) => {
+  const showStatus = (text, ok) => {
+    status.textContent = text;
+    status.classList.toggle("form__status--error", !ok);
+    status.hidden = false;
+  };
+
+  const setLoading = (loading) => {
+    submitBtn.disabled = loading;
+    submitBtn.textContent = loading ? t.sending : t.submit;
+  };
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    success.hidden = true;
+    status.hidden = true;
 
     const name = form.elements.name;
     const phone = form.elements.phone;
     const service = form.elements.service;
     const message = form.elements.message;
+    const company = form.elements.company; // honeypot
 
     const nameError = document.getElementById("f-name-error");
     const phoneError = document.getElementById("f-phone-error");
@@ -162,23 +174,32 @@
       return;
     }
 
-    const subject = t.subject + name.value.trim();
-    const body = [
-      t.intro,
-      "",
-      t.name + name.value.trim(),
-      t.phone + phone.value.trim(),
-      t.service + service.value,
-      t.message + (message.value.trim() || "—"),
-    ].join("\n");
+    const payload = {
+      name: name.value.trim(),
+      phone: phone.value.trim(),
+      service: service.value,
+      message: message.value.trim(),
+      company: company ? company.value : "",
+      lang: LANG,
+    };
 
-    window.location.href =
-      "mailto:" + RECIPIENT +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(body);
+    setLoading(true);
+    try {
+      const res = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || "request_failed");
 
-    success.hidden = false;
-    form.reset();
+      showStatus(t.sent, true);
+      form.reset();
+    } catch (err) {
+      showStatus(t.error, false);
+    } finally {
+      setLoading(false);
+    }
   });
 
   ["input", "change"].forEach((evt) => {

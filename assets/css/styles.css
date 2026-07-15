@@ -771,6 +771,21 @@ h1, h2, h3 { font-family: var(--font-head); line-height: 1.22; font-weight: 600;
   font-size: 14.5px;
   text-align: center;
 }
+.form__success.form__status--error {
+  background: rgba(196, 73, 77, 0.10);
+  border-color: rgba(196, 73, 77, 0.40);
+  color: #B03A3E;
+}
+.form__submit[disabled] { opacity: 0.65; cursor: progress; }
+
+/* Honeypot: odamlar uchun ko'rinmas, botlar to'ldiradi */
+.form__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
 .contact__list {
   display: grid;
