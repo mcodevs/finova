@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://finovagroup.uz/sitemap.xml

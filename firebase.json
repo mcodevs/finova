@@ -1,0 +1,34 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      "**/.*",
+      "**/node_modules/**",
+      "README.md"
+    ],
+    "cleanUrls": true,
+    "headers": [
+      {
+        "comment": "Standart: HTML va boshqa hamma narsa — har safar qayta tekshirilsin. cleanUrls tufayli '/ru/' kabi manzillar '.html' bilan tugamaydi, shuning uchun kengaytma bo'yicha glob ishlamaydi.",
+        "source": "**",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+        ]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=3600" }
+        ]
+      },
+      {
+        "source": "**/*.@(svg|png|jpg|jpeg|webp|ico)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=2592000" }
+        ]
+      }
+    ]
+  }
+}

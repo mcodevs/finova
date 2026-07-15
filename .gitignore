@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Firebase deploy cache
+.firebase/
+
+# Logs
+*.log
+firebase-debug.log
