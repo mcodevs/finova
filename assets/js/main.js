@@ -126,7 +126,7 @@
 
   /* ---------- Contact form → Telegram (Cloudflare Worker orqali) ---------- */
   // Worker'ni deploy qilgach, uning manzilini shu yerga qo'ying (worker/README.md).
-  const WORKER_URL = "https://finova-lead.SIZNING-SUBDOMEN.workers.dev";
+  const WORKER_URL = "https://finova-lead.keyingiavlod-tech.workers.dev";
 
   const form = document.getElementById("contact-form");
   const status = document.getElementById("form-status");
