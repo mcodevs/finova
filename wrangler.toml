@@ -1,0 +1,14 @@
+# Cloudflare Worker konfiguratsiyasi — Git-ulangan deploy uchun.
+# Cloudflare "finova-lead" loyihasi bu repodan `npx wrangler deploy` bilan deploy qiladi.
+
+name = "finova-lead"
+main = "worker/worker.js"
+compatibility_date = "2024-11-01"
+
+# Maxfiy EMAS o'zgaruvchilar (bular git'ga tushadi).
+[vars]
+CHAT_ID = "-5231087147"
+ALLOWED_ORIGINS = "https://finovagroup.uz,https://www.finovagroup.uz,https://finova-consulting.web.app,https://finova-consulting.firebaseapp.com"
+
+# ⚠️ BOT_TOKEN bu yerga YOZILMAYDI — u maxfiy.
+# Cloudflare dashboard → Worker → Settings → Variables and Secrets → "Secret" sifatida qo'shiladi.
